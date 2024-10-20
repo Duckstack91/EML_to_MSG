@@ -4,11 +4,14 @@ import os
 from configparser import ConfigParser
 import traceback
 from eml_to_msg import process_directory
+import sys
 
 CONFIG_FILE = 'config.ini'
 
+
 class ToolTip:
     """Tooltip class to display tooltips for widgets."""
+
     def __init__(self, widget, text):
         self.widget = widget
         self.text = text
@@ -28,7 +31,8 @@ class ToolTip:
             self.tooltip_window = tk.Toplevel(self.widget)
             self.tooltip_window.wm_overrideredirect(True)  # Kein Fensterrahmen
             self.tooltip_window.wm_geometry(f"+{x}+{y}")  # Positionieren des Tooltips
-            label = tk.Label(self.tooltip_window, text=self.text, background="lightyellow", borderwidth=1, relief="solid")
+            label = tk.Label(self.tooltip_window, text=self.text, background="lightyellow", borderwidth=1,
+                             relief="solid")
             label.pack()
 
     def hide_tooltip(self, event=None):
@@ -39,10 +43,22 @@ class ToolTip:
             self.widget.after_cancel(self.tooltip_id)  # Den Tooltip-Task abbrechen
             self.tooltip_id = None
 
+
 class ConverterApp:
     def __init__(self, root):
         self.root = root
         self.root.title("EML to MSG Converter")
+        current_directory = os.path.dirname(os.path.abspath(__file__))
+        #print (f"aktueller pfad {current_directory}")
+
+        # Icon-Pfad festlegen
+        if getattr(sys, 'frozen', False):  # Überprüfen, ob das Skript als .exe läuft
+            icon_path = os.path.join(sys._MEIPASS, 'src', 'icons', 'Screenshot_1.png')
+        else:
+            icon_path = os.path.join(current_directory,  'icons', 'Screenshot_1.png')
+
+        icon = tk.PhotoImage(file=icon_path)
+        self.root.iconphoto(False, icon)
 
         self.config = ConfigParser()
         self.load_config()
@@ -127,6 +143,7 @@ class ConverterApp:
         self.config['directories']['eml_directory'] = self.eml_directory
         with open(CONFIG_FILE, 'w') as configfile:
             self.config.write(configfile)
+
 
 if __name__ == "__main__":
     root = tk.Tk()

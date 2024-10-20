@@ -4,33 +4,40 @@ import os
 from configparser import ConfigParser
 import traceback
 from eml_to_msg import process_directory
-from idlelib.tooltip import Hovertip
 
 CONFIG_FILE = 'config.ini'
+
 class ToolTip:
     """Tooltip class to display tooltips for widgets."""
     def __init__(self, widget, text):
         self.widget = widget
         self.text = text
         self.tooltip_window = None
+        self.tooltip_id = None
         self.widget.bind("<Enter>", self.show_tooltip)
         self.widget.bind("<Leave>", self.hide_tooltip)
 
     def show_tooltip(self, event=None):
-        if self.tooltip_window is not None:
-            return
-        x = self.widget.winfo_rootx() + 20
-        y = self.widget.winfo_rooty() + 20
-        self.tooltip_window = tk.Toplevel(self.widget)
-        self.tooltip_window.wm_overrideredirect(True)
-        self.tooltip_window.wm_geometry(f"+{x}+{y}")
-        label = tk.Label(self.tooltip_window, text=self.text, background="lightyellow", borderwidth=1, relief="solid")
-        label.pack()
+        # Tooltip nach 5 Sekunden anzeigen
+        self.tooltip_id = self.widget.after(5000, self._create_tooltip)
+
+    def _create_tooltip(self):
+        if self.tooltip_window is None:  # Tooltip nur erstellen, wenn er nicht bereits vorhanden ist
+            x = self.widget.winfo_rootx() + 20
+            y = self.widget.winfo_rooty() + 20
+            self.tooltip_window = tk.Toplevel(self.widget)
+            self.tooltip_window.wm_overrideredirect(True)  # Kein Fensterrahmen
+            self.tooltip_window.wm_geometry(f"+{x}+{y}")  # Positionieren des Tooltips
+            label = tk.Label(self.tooltip_window, text=self.text, background="lightyellow", borderwidth=1, relief="solid")
+            label.pack()
 
     def hide_tooltip(self, event=None):
         if self.tooltip_window:
             self.tooltip_window.destroy()
             self.tooltip_window = None
+        if self.tooltip_id:  # Falls der Tooltip noch nicht angezeigt wurde
+            self.widget.after_cancel(self.tooltip_id)  # Den Tooltip-Task abbrechen
+            self.tooltip_id = None
 
 class ConverterApp:
     def __init__(self, root):
@@ -46,18 +53,22 @@ class ConverterApp:
         tk.Label(self.root, text="EML Verzeichnis auswählen:").pack(pady=5)
         self.eml_dir_entry = tk.Entry(self.root, width=50)
         self.eml_dir_entry.pack(padx=5)
+
         self.browse_eml_button = tk.Button(self.root, text="Durchsuchen", command=self.browse_eml_directory)
         self.browse_eml_button.pack(pady=5)
+
+        # Tooltip für "Durchsuchen"-Button
+        ToolTip(self.browse_eml_button, "Wählen Sie das Verzeichnis mit EML-Dateien aus.")
 
         # Hover-Effekt für "Durchsuchen"-Button
         self.browse_eml_button.bind("<Enter>", self.on_enter_browse)
         self.browse_eml_button.bind("<Leave>", self.on_leave_browse)
 
-        # Tooltip für "Durchsuchen"-Button
-        ToolTip(self.browse_eml_button, "Wählen Sie das Verzeichnis mit EML-Dateien aus.")
-
         self.convert_button = tk.Button(self.root, text="Konvertieren", command=self.convert)
         self.convert_button.pack(pady=10)
+
+        # Tooltip für "Konvertieren"-Button
+        ToolTip(self.convert_button, "Klick hier, um die Konvertierung von EML zu MSG zu starten.")
 
         # Hover-Effekt für "Konvertieren"-Button
         self.convert_button.bind("<Enter>", self.on_enter_convert)

@@ -54,7 +54,7 @@ def eml_to_msg(eml_file, output_dir, prefix):
             traceback.print_exc()
             return
 
-        # Save attachments
+        # Anhänge speichern
         try:
             attachment_counter = 2
             for part in msg.iter_attachments():

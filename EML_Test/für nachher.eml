@@ -1,0 +1,171 @@
+X-Notes-Item: 1;
+ name=$AutoSpell
+X-Notes-Item: Mon, 8 Apr 2024 09:47:02 +0200;
+ type=400; name=OriginalModTime
+X-Notes-Item: StdNotesLtr99;
+ name=Logo
+X-Notes-Item: StdNotesLtr99;
+ name=dLogo
+X-Notes-Item: True;
+ name=useApplet
+X-Notes-Item: 1;
+ name=DefaultMailSaveOptions
+X-Notes-Item: 1;
+ name=ExpandPersonalGroups
+X-Notes-Item: ;
+ name=tmpImp
+X-Notes-Item: ;
+ name=Sign
+X-Notes-Item: Vertraulich;
+ name=ConfidentialString
+X-Notes-Item: ;
+ name=Classification
+Subject: =?ISO-8859-1?Q?f=FCr_nachher?=
+X-Notes-Item: Diese Nachricht wurde nicht zugestellt an;
+ name=tmpPartialSent
+X-Notes-Item: Zustellungszeitpunkt der Nachricht:;
+ name=tmpDelayedDelivery
+X-KeepSent: CFB6625C:6576B2DA-C1258AF9:002AB514;
+ type=4; name=$KeepSent
+To: Hayri.Kologlu@esslingen.de,
+	Sercan.Yurdusever@esslingen.de
+X-Notes-Item: CN=Hayri Kologlu/OU=SGE/O=Esslingen,
+	CN=Sercan Yurdusever/OU=SGE/O=Esslingen;
+ type=501; flags=45; name=OriginalTo
+X-Notes-Item: ;
+ flags=45; name=InetCopyTo
+X-Notes-Item: 1,
+	1;
+ type=501; name=$StorageTo
+X-Mailer: HCL Notes Release 11.0.1FP1 July 20, 2020
+From: Cynthia.Bertazzoni@esslingen.de
+X-Notes-Item: CN=Cynthia Bertazzoni/OU=SGE/O=Esslingen;
+ name=$OnBehalfOf
+X-Notes-Item: CFB6625C:6576B2DA-C1258AF9:002AB514;
+ type=4; name=$Orig
+X-Notes-Item: Memo;
+ name=Form
+Message-ID: <OFCFB6625C.6576B2DA-ONC1258AF9.002AB514-C1258AF9.002AC314@LocalDomain>
+X-Notes-Item: 0;
+ name=Encrypt
+Date: Mon, 8 Apr 2024 09:47:04 +0200
+X-Notes-Item: Job:ESS - Virencheck AUSGEHEND,
+	Start:2024-04-08T07:47:04.852-00:00,
+	NumAttas:0,
+	BodyDetails:Ok,
+	BodyResult:Success,
+	Detail:Ok,
+	Result:Success,
+	End:2024-04-08T07:47:04.883-00:00;
+ type=501; flags=0; name=ess_result_virencheck_ausgehend
+X-Notes-Item: CN=ESDOM1/OU=Server/O=Esslingen;
+ flags=44; name=$UpdatedBy
+X-MIMETrack: CD-MIME by ntm_grab.EXE on ESDOM1/Server/Esslingen(Release 11.0.1FP6|August
+ 19, 2022) at 08.04.2024 09:47:04,
+	CD-MIME complete at 08.04.2024 09:47:04,
+	Itemize by ntm_grab.EXE on ESDOM1/Server/Esslingen(Release 11.0.1FP6|August
+ 19, 2022) at 08.04.2024 09:47:04,
+	Serialize by ntm_grab.EXE on ESDOM1/Server/Esslingen(Release 11.0.1FP6|August
+ 19, 2022) at 08.04.2024 09:47:04,
+	Serialize complete at 08.04.2024 09:47:04,
+	Serialize by notes2.exe on Sercan Yurdusever/SGE/Esslingen(Release 9.0.1FP8|February
+ 24, 2017) at 06.06.2024 07:52:05,
+	Serialize complete at 06.06.2024 07:52:05
+MIME-Version: 1.0
+X-Notes-Item: ESS - Standardsignatur mit Abteilung INTERN,
+	32653A46742D3A8CC1257F790055C896;
+ type=501; name=$TkJobFlag
+X-Notes-Item: starting jobs # ESDOM1/Server/Esslingen # 08.04.2024 09:47:04 # Process M01
+ # 25.1.1.10497.n11/64,
+	ESS - Split All Mails#NT00000B5A(9999) # ESDOM1/Server/Esslingen # 08.04.2024
+ 09:47:04,
+	starting jobs # ESDOM1/Server/Esslingen # 08.04.2024 09:47:04 # Process M02
+ # 25.1.1.10497.n11/64,
+	ESS - Virencheck AUSGEHEND#NT00000BF6(8000) # ESDOM1/Server/Esslingen # 08.04.2024
+ 09:47:04,
+	ESS - Standardsignatur mit Abteilung INTERN#NT00000B86(3200) # ESDOM1/Server/Esslingen
+ # 08.04.2024 09:47:04,
+	jobs ended # ESDOM1/Server/Esslingen # 08.04.2024 09:47:04;
+ type=501; flags=0; name=$TkFlag50
+X-Notes-Item: ;
+ type=501; name=Categories
+X-Notes-Item: ;
+ type=401; name=$Revisions
+X-Notes-Item: CN=ESDOM1/OU=Server/O=Esslingen;
+ type=501; flags=0; name=RouteServers
+X-Notes-Item: 08-Apr-2024 09:47:04 CEDT/08-Apr-2024 09:47:05 CEDT;
+ type=401; flags=0; name=RouteTimes
+X-Notes-Item: Mon, 8 Apr 2024 09:47:05 +0200;
+ type=400; name=DeliveredDate
+X-Notes-Item: =?ISO-8859-1?Q?Cynthia_Bertazzoni_l=E4dt_Sie_zu_einem_geplanten_Zoom-?=
+ =?ISO-8859-1?Q?Meeting_ein=2E_Thema=3A_Pers=F6nlicher=A0Meetingraum_von?=;
+ flags=6; name=$Abstract
+X-Notes-Item: CFB6625C:6576B2DA-C1258AF9:002AB514;
+ type=4; name=$TUA
+X-Notes-Item: 1;
+ name=$NoteHasNativeMIME
+X-Notes-Item: CN=Cynthia Bertazzoni/OU=SGE/O=Esslingen;
+ name=OriginalFrom
+Content-type: multipart/alternative; 
+	Boundary="0__=4EBB006ADFB945BD8f9e8a93df938690918c4EBB006ADFB945BD"
+Content-Disposition: inline
+
+
+--0__=4EBB006ADFB945BD8f9e8a93df938690918c4EBB006ADFB945BD
+Content-transfer-encoding: quoted-printable
+Content-type: text/plain; charset=ISO-8859-1
+
+
+
+Cynthia Bertazzoni l=E4dt Sie zu einem geplanten Zoom-Meeting ein.
+
+Thema: Pers=F6nlicher=A0Meetingraum von Cynthia Bertazzoni
+
+Beitreten Zoom Meeting
+https://eu01web.zoom.us/j/8035759578
+
+Meeting-ID: 803 575 9578
+
+
+Mit freundlichen Gr=FC=DFen
+Cynthia Bertazzoni
+
+St=E4dtische Geb=E4ude Esslingen am Neckar
+IT-Services
+Tel.: +49 711 3512-3426
+--0__=4EBB006ADFB945BD8f9e8a93df938690918c4EBB006ADFB945BD
+Content-transfer-encoding: quoted-printable
+Content-type: text/html; charset=ISO-8859-1
+Content-Disposition: inline
+
+<html><body>
+<p><font size=3D=222=22 face=3D=22sans-serif=22>Cynthia Bertazzoni l=E4dt=
+ Sie zu einem geplanten Zoom-Meeting ein.</font><br>
+<br>
+<font size=3D=222=22 face=3D=22sans-serif=22>Thema: Pers=F6nlicher=A0Meet=
+ingraum von Cynthia Bertazzoni</font><br>
+<br>
+<font size=3D=222=22 face=3D=22sans-serif=22>Beitreten Zoom Meeting</font=
+><br>
+<a href=3D=22https://eu01web.zoom.us/j/8035759578=22><font size=3D=222=
+=22 face=3D=22sans-serif=22>https://eu01web.zoom.us/j/8035759578</font></=
+a><br>
+<br>
+<font size=3D=222=22 face=3D=22sans-serif=22>Meeting-ID: 803 575 9578</fo=
+nt><br>
+<br>
+<font size=3D=222=22 face=3D=22sans-serif=22><br>
+Mit freundlichen Gr=FC=DFen<br>
+Cynthia Bertazzoni</font><p><span style=3D=22font-family: Arial;=22><font=
+ size=3D=222=22>St&#228;dtische Geb&#228;ude Esslingen am Neckar</font></=
+span><br>
+<span style=3D=22font-family: Arial;=22><font size=3D=222=22>IT-Services<=
+br>
+Tel.: +49 711 3512-3426</font></span><font size=3D=222=22></font></p>
+
+<p>&nbsp;</p>
+
+<p>&nbsp;</p>
+</body></html>
+--0__=4EBB006ADFB945BD8f9e8a93df938690918c4EBB006ADFB945BD--
+

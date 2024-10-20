@@ -53,7 +53,7 @@ class ConverterApp:
 
         # Icon-Pfad festlegen
         if getattr(sys, 'frozen', False):  # Überprüfen, ob das Skript als .exe läuft
-            icon_path = os.path.join(sys._MEIPASS, 'src', 'icons', 'Screenshot_1.png')
+            icon_path = os.path.join(sys._MEIPASS,  'icons', 'Screenshot_1.png')
         else:
             icon_path = os.path.join(current_directory,  'icons', 'Screenshot_1.png')
 

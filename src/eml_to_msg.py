@@ -62,14 +62,26 @@ def eml_to_msg(eml_file, output_dir, prefix):
             attachment_counter = 2  # Beginne bei 02 für Anhänge
             for part in msg.iter_attachments():
                 filename = part.get_filename()
-                if filename:
+
+                if filename:  # Überprüfe, ob der Anhang einen Dateinamen hat
                     sanitized_filename = sanitize_filename(filename)
                     attachment_filename = f"{prefix}{str(attachment_counter).zfill(2)}_{sanitized_filename}"
                     attachment_path = os.path.join(output_dir, attachment_filename)
-                    with open(attachment_path, 'wb') as af:
-                        af.write(part.get_payload(decode=True))
-                    print(f"Anhang gespeichert: {attachment_path}")
+
+                    # Falls der Anhang eine .eml-Datei ist, diese ebenfalls als .msg speichern
+                    if filename.endswith('.eml'):
+                        with open(attachment_path, 'wb') as af:
+                            af.write(part.get_payload(decode=True))
+                        # Jetzt die verschachtelte .eml-Datei konvertieren
+                        print(f"Verschachtelte EML-Datei gefunden: {attachment_path}")
+                        eml_to_msg(attachment_path, output_dir, f"{prefix}{str(attachment_counter).zfill(2)}_")
+                    else:
+                        with open(attachment_path, 'wb') as af:
+                            af.write(part.get_payload(decode=True))
+                        print(f"Anhang gespeichert: {attachment_path}")
+
                     attachment_counter += 1
+
         except Exception as e:
             print(f"Fehler beim Speichern der Anhänge: {e}")
             traceback.print_exc()

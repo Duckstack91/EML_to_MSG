@@ -5,32 +5,31 @@ from email.parser import BytesParser
 import win32com.client
 import re
 import traceback
-from idlelib.tooltip import Hovertip
 
 def sanitize_filename(filename):
-    """Sanitize filename to prevent any issues with file naming."""
+    """Bereinigt den Dateinamen, um Probleme mit Sonderzeichen zu vermeiden."""
     return re.sub(r'[^a-zA-Z0-9_\-\.]', '_', filename)
-#test
+
 def eml_to_msg(eml_file, output_dir, prefix):
     try:
-        # Parse the .eml file
+        # Parse die .eml-Datei
         with open(eml_file, 'rb') as f:
             msg = BytesParser(policy=policy.default).parse(f)
 
-        # Create an Outlook message object
+        # Erstelle ein Outlook-Nachrichtenobjekt
         try:
-            print("Attempting to initialize Outlook...")
+            print("Versuche, Outlook zu initialisieren...")
             outlook = win32com.client.Dispatch("Outlook.Application")
             outlook_msg = outlook.CreateItem(0)
-            print("Outlook initialized successfully.")
+            print("Outlook erfolgreich initialisiert.")
         except Exception as e:
-            print(f"Error initializing Outlook: {e}")
+            print(f"Fehler bei der Initialisierung von Outlook: {e}")
             traceback.print_exc()
             return
 
-        # Set email properties
+        # Setze die E-Mail-Eigenschaften
         try:
-            subject = msg.get('Subject', 'No Subject')
+            subject = msg.get('Subject', 'Kein Betreff')
             sanitized_subject = sanitize_filename(subject)
             outlook_msg.Subject = subject
             outlook_msg.Body = msg.get_body(preferencelist=('plain')).get_content() if msg.get_body(preferencelist=('plain')) else ''
@@ -39,24 +38,28 @@ def eml_to_msg(eml_file, output_dir, prefix):
             outlook_msg.To = msg.get('To', '')
             outlook_msg.CC = msg.get('CC', '')
         except Exception as e:
-            print(f"Error setting email properties: {e}")
+            print(f"Fehler beim Setzen der E-Mail-Eigenschaften: {e}")
             traceback.print_exc()
             return
 
-        # Save the message
+        # Bereinige den .eml-Dateinamen für das Speichern der .msg-Datei
+        eml_filename = os.path.splitext(os.path.basename(eml_file))[0]  # Entferne die Dateiendung ".eml"
+        sanitized_eml_filename = sanitize_filename(eml_filename)
+
+        # Speichere die Nachricht als .msg mit Präfix und bereinigtem .eml-Namen
         try:
-            msg_filename = f"{prefix}01.msg"
+            msg_filename = f"{prefix}01_{sanitized_eml_filename}.msg"
             msg_file = os.path.join(output_dir, msg_filename)
             outlook_msg.SaveAs(msg_file)
-            print(f"Successfully converted {eml_file} to {msg_file}")
+            print(f"Erfolgreich konvertiert: {eml_file} zu {msg_file}")
         except Exception as e:
-            print(f"Error saving the message: {e}")
+            print(f"Fehler beim Speichern der Nachricht: {e}")
             traceback.print_exc()
             return
 
-        # Anhänge speichern
+        # Speichere Anhänge
         try:
-            attachment_counter = 2
+            attachment_counter = 2  # Beginne bei 02 für Anhänge
             for part in msg.iter_attachments():
                 filename = part.get_filename()
                 if filename:
@@ -65,35 +68,32 @@ def eml_to_msg(eml_file, output_dir, prefix):
                     attachment_path = os.path.join(output_dir, attachment_filename)
                     with open(attachment_path, 'wb') as af:
                         af.write(part.get_payload(decode=True))
+                    print(f"Anhang gespeichert: {attachment_path}")
                     attachment_counter += 1
         except Exception as e:
-            print(f"Error saving attachments: {e}")
+            print(f"Fehler beim Speichern der Anhänge: {e}")
             traceback.print_exc()
             return
 
     except Exception as e:
-        print(f"An error occurred while processing {eml_file}: {e}")
+        print(f"Ein Fehler ist aufgetreten bei der Verarbeitung von {eml_file}: {e}")
         traceback.print_exc()
 
 def process_directory(eml_directory):
+    """Verarbeitet alle EML-Dateien im angegebenen Verzeichnis."""
     counter = 1
     for root, dirs, files in os.walk(eml_directory):
-        # Sort files alphabetically
-        files.sort()
+        files.sort()  # Sortiere die Dateien alphabetisch
         for file in files:
-            prefix = f"{str(counter).zfill(4)}_"
+            prefix = f"{str(counter).zfill(4)}_"  # Präfix für jede E-Mail und deren Anhänge
             file_path = os.path.join(root, file)
             if file.endswith('.eml'):
                 eml_to_msg(file_path, root, prefix)
             else:
-                # Simply rename the file with the prefix
+                # Falls es keine .eml-Datei ist, nur den Dateinamen ändern
                 sanitized_filename = sanitize_filename(file)
                 new_filename = f"{prefix}{sanitized_filename}"
                 new_file_path = os.path.join(root, new_filename)
                 os.rename(file_path, new_file_path)
-                print(f"Renamed {file_path} to {new_file_path}")
+                print(f"Datei umbenannt: {file_path} zu {new_file_path}")
             counter += 1
-
-if __name__ == "__main__":
-    eml_directory = "C:/Program Files (x86)/Programmieren/EML_to_MSG/venv/eml_files"
-    process_directory(eml_directory)

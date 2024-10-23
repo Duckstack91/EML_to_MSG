@@ -147,7 +147,7 @@ class ConverterApp:
 
 if __name__ == "__main__":
     root = tk.Tk()
-    root.title("test")
-    root.iconbitmap("./icons/Screenshot_1.png")
+    #root.title("test")
+    #root.iconbitmap("./icons/Screenshot_1.png")
     app = ConverterApp(root)
     root.mainloop()

@@ -5,10 +5,14 @@ from email.parser import BytesParser
 import win32com.client
 import re
 import traceback
+import re
 
 def sanitize_filename(filename):
-    """Bereinigt den Dateinamen, um Probleme mit Sonderzeichen zu vermeiden."""
-    return re.sub(r'[^a-zA-Z0-9_\-\.]', '_', filename)
+    """Bereinigt den Dateinamen, behält aber Umlaute und einige Sonderzeichen."""
+    # Erlaube Umlaute und typische Sonderzeichen wie "-", "_" und "." in Dateinamen
+    allowed_chars = re.compile(r'[^a-zA-Z0-9äöüÄÖÜß_\-\.]')
+    return allowed_chars.sub('_', filename)
+
 
 def eml_to_msg(eml_file, output_dir, prefix):
     try:

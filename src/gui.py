@@ -8,10 +8,8 @@ import sys
 
 CONFIG_FILE = 'config.ini'
 
-
 class ToolTip:
     """Tooltip class to display tooltips for widgets."""
-
     def __init__(self, widget, text):
         self.widget = widget
         self.text = text
@@ -25,12 +23,12 @@ class ToolTip:
         self.tooltip_id = self.widget.after(5000, self._create_tooltip)
 
     def _create_tooltip(self):
-        if self.tooltip_window is None:  # Tooltip nur erstellen, wenn er nicht bereits vorhanden ist
+        if self.tooltip_window is None:
             x = self.widget.winfo_rootx() + 20
             y = self.widget.winfo_rooty() + 20
             self.tooltip_window = tk.Toplevel(self.widget)
-            self.tooltip_window.wm_overrideredirect(True)  # Kein Fensterrahmen
-            self.tooltip_window.wm_geometry(f"+{x}+{y}")  # Positionieren des Tooltips
+            self.tooltip_window.wm_overrideredirect(True)
+            self.tooltip_window.wm_geometry(f"+{x}+{y}")
             label = tk.Label(self.tooltip_window, text=self.text, background="lightyellow", borderwidth=1,
                              relief="solid")
             label.pack()
@@ -39,23 +37,20 @@ class ToolTip:
         if self.tooltip_window:
             self.tooltip_window.destroy()
             self.tooltip_window = None
-        if self.tooltip_id:  # Falls der Tooltip noch nicht angezeigt wurde
-            self.widget.after_cancel(self.tooltip_id)  # Den Tooltip-Task abbrechen
+        if self.tooltip_id:
+            self.widget.after_cancel(self.tooltip_id)
             self.tooltip_id = None
-
 
 class ConverterApp:
     def __init__(self, root):
         self.root = root
         self.root.title("EML to MSG Converter")
         current_directory = os.path.dirname(os.path.abspath(__file__))
-        #print (f"aktueller pfad {current_directory}")
 
-        # Icon-Pfad festlegen
-        if getattr(sys, 'frozen', False):  # Überprüfen, ob das Skript als .exe läuft
-            icon_path = os.path.join(sys._MEIPASS,  'icons', 'Screenshot_1.png')
+        if getattr(sys, 'frozen', False):
+            icon_path = os.path.join(sys._MEIPASS, 'icons', 'Screenshot_1.png')
         else:
-            icon_path = os.path.join(current_directory,  'icons', 'Screenshot_1.png')
+            icon_path = os.path.join(current_directory, 'icons', 'Screenshot_1.png')
 
         icon = tk.PhotoImage(file=icon_path)
         self.root.iconphoto(False, icon)
@@ -73,25 +68,34 @@ class ConverterApp:
         self.browse_eml_button = tk.Button(self.root, text="Durchsuchen", command=self.browse_eml_directory)
         self.browse_eml_button.pack(pady=5)
 
-        # Tooltip für "Durchsuchen"-Button
         ToolTip(self.browse_eml_button, "Wählen Sie das Verzeichnis mit EML-Dateien aus.")
 
-        # Hover-Effekt für "Durchsuchen"-Button
         self.browse_eml_button.bind("<Enter>", self.on_enter_browse)
         self.browse_eml_button.bind("<Leave>", self.on_leave_browse)
+
+        tk.Label(self.root, text="Zielordner auswählen:").pack(pady=5)
+        self.output_dir_entry = tk.Entry(self.root, width=50)
+        self.output_dir_entry.pack(padx=5)
+
+        self.browse_output_button = tk.Button(self.root, text="Durchsuchen", command=self.browse_output_directory)
+        self.browse_output_button.pack(pady=5)
+
+        ToolTip(self.browse_output_button, "Wählen Sie das Zielverzeichnis für konvertierte Dateien aus.")
+
+        self.browse_output_button.bind("<Enter>", self.on_enter_browse)
+        self.browse_output_button.bind("<Leave>", self.on_leave_browse)
 
         self.convert_button = tk.Button(self.root, text="Konvertieren", command=self.convert)
         self.convert_button.pack(pady=10)
 
-        # Tooltip für "Konvertieren"-Button
         ToolTip(self.convert_button, "Klick hier, um die Konvertierung von EML zu MSG zu starten.")
 
-        # Hover-Effekt für "Konvertieren"-Button
         self.convert_button.bind("<Enter>", self.on_enter_convert)
         self.convert_button.bind("<Leave>", self.on_leave_convert)
 
         # Load saved directories if available
         self.eml_dir_entry.insert(0, self.config['directories']['eml_directory'])
+        self.output_dir_entry.insert(0, self.config['directories']['output_directory'])
 
         root.resizable(False, False)
 
@@ -113,41 +117,46 @@ class ConverterApp:
             self.eml_dir_entry.delete(0, tk.END)
             self.eml_dir_entry.insert(0, self.eml_directory)
 
+    def browse_output_directory(self):
+        self.output_directory = filedialog.askdirectory()
+        if self.output_directory:
+            self.output_dir_entry.delete(0, tk.END)
+            self.output_dir_entry.insert(0, self.output_directory)
+
     def convert(self):
         self.eml_directory = self.eml_dir_entry.get()
-        if not self.eml_directory:
-            messagebox.showerror("Fehler", "Bitte wähle ein EML-Verzeichnis aus.")
+        self.output_directory = self.output_dir_entry.get()
+
+        if not self.eml_directory or not self.output_directory:
+            messagebox.showerror("Fehler", "Bitte wählen Sie sowohl ein EML- als auch ein Zielverzeichnis aus.")
             return
 
-        if not os.path.isdir(self.eml_directory):
-            messagebox.showerror("Fehler", "Das ausgewählte Verzeichnis existiert nicht.")
+        if not os.path.isdir(self.eml_directory) or not os.path.isdir(self.output_directory):
+            messagebox.showerror("Fehler", "Ein ausgewähltes Verzeichnis existiert nicht.")
             return
 
         try:
-            process_directory(self.eml_directory)
+            process_directory(self.eml_directory, self.output_directory)
             messagebox.showinfo("Erfolg", "Die Konvertierung wurde erfolgreich abgeschlossen.")
             self.save_config()
         except Exception as e:
             error_message = f"Ein Fehler ist aufgetreten: {str(e)}"
-            detailed_error_message = f"{error_message}\n\n{traceback.format_exc()}"
-            print(detailed_error_message)  # Drucke den Fehler-Stacktrace in die Konsole
+            print(f"{error_message}\n\n{traceback.format_exc()}")
             messagebox.showerror("Fehler", error_message)
 
     def load_config(self):
         if os.path.exists(CONFIG_FILE):
             self.config.read(CONFIG_FILE)
         else:
-            self.config['directories'] = {'eml_directory': ''}
+            self.config['directories'] = {'eml_directory': '', 'output_directory': ''}
 
     def save_config(self):
         self.config['directories']['eml_directory'] = self.eml_directory
+        self.config['directories']['output_directory'] = self.output_directory
         with open(CONFIG_FILE, 'w') as configfile:
             self.config.write(configfile)
 
-
 if __name__ == "__main__":
     root = tk.Tk()
-    #root.title("test")
-    #root.iconbitmap("./icons/Screenshot_1.png")
     app = ConverterApp(root)
     root.mainloop()

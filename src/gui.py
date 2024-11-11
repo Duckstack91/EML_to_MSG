@@ -9,7 +9,7 @@ import sys
 CONFIG_FILE = 'config.ini'
 
 class ToolTip:
-    """Tooltip class to display tooltips for widgets."""
+    """Tooltip class to display tooltips for wjjidgets."""
     def __init__(self, widget, text):
         self.widget = widget
         self.text = text
@@ -19,7 +19,6 @@ class ToolTip:
         self.widget.bind("<Leave>", self.hide_tooltip)
 
     def show_tooltip(self, event=None):
-        # Tooltip nach 5 Sekunden anzeigen
         self.tooltip_id = self.widget.after(5000, self._create_tooltip)
 
     def _create_tooltip(self):
@@ -29,8 +28,7 @@ class ToolTip:
             self.tooltip_window = tk.Toplevel(self.widget)
             self.tooltip_window.wm_overrideredirect(True)
             self.tooltip_window.wm_geometry(f"+{x}+{y}")
-            label = tk.Label(self.tooltip_window, text=self.text, background="lightyellow", borderwidth=1,
-                             relief="solid")
+            label = tk.Label(self.tooltip_window, text=self.text, background="lightyellow", borderwidth=1, relief="solid")
             label.pack()
 
     def hide_tooltip(self, event=None):
@@ -73,18 +71,6 @@ class ConverterApp:
         self.browse_eml_button.bind("<Enter>", self.on_enter_browse)
         self.browse_eml_button.bind("<Leave>", self.on_leave_browse)
 
-        tk.Label(self.root, text="Zielordner auswählen:").pack(pady=5)
-        self.output_dir_entry = tk.Entry(self.root, width=50)
-        self.output_dir_entry.pack(padx=5)
-
-        self.browse_output_button = tk.Button(self.root, text="Durchsuchen", command=self.browse_output_directory)
-        self.browse_output_button.pack(pady=5)
-
-        ToolTip(self.browse_output_button, "Wählen Sie das Zielverzeichnis für konvertierte Dateien aus.")
-
-        self.browse_output_button.bind("<Enter>", self.on_enter_browse)
-        self.browse_output_button.bind("<Leave>", self.on_leave_browse)
-
         self.convert_button = tk.Button(self.root, text="Konvertieren", command=self.convert)
         self.convert_button.pack(pady=10)
 
@@ -93,9 +79,7 @@ class ConverterApp:
         self.convert_button.bind("<Enter>", self.on_enter_convert)
         self.convert_button.bind("<Leave>", self.on_leave_convert)
 
-        # Load saved directories if available
         self.eml_dir_entry.insert(0, self.config['directories']['eml_directory'])
-        self.output_dir_entry.insert(0, self.config['directories']['output_directory'])
 
         root.resizable(False, False)
 
@@ -117,15 +101,9 @@ class ConverterApp:
             self.eml_dir_entry.delete(0, tk.END)
             self.eml_dir_entry.insert(0, self.eml_directory)
 
-    def browse_output_directory(self):
-        self.output_directory = filedialog.askdirectory()
-        if self.output_directory:
-            self.output_dir_entry.delete(0, tk.END)
-            self.output_dir_entry.insert(0, self.output_directory)
-
     def convert(self):
         self.eml_directory = self.eml_dir_entry.get()
-        self.output_directory = self.output_dir_entry.get()
+        self.output_directory = self.config['directories']['output_directory']
 
         if not self.eml_directory or not self.output_directory:
             messagebox.showerror("Fehler", "Bitte wählen Sie sowohl ein EML- als auch ein Zielverzeichnis aus.")
@@ -152,7 +130,6 @@ class ConverterApp:
 
     def save_config(self):
         self.config['directories']['eml_directory'] = self.eml_directory
-        self.config['directories']['output_directory'] = self.output_directory
         with open(CONFIG_FILE, 'w') as configfile:
             self.config.write(configfile)
 

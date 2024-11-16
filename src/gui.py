@@ -9,7 +9,7 @@ import sys
 CONFIG_FILE = 'config.ini'
 
 class ToolTip:
-    """Tooltip class to display tooltips for wjjidgets."""
+    """Toofltip class to display tooltips for wjjidgets."""
     def __init__(self, widget, text):
         self.widget = widget
         self.text = text

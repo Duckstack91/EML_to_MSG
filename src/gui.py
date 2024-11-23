@@ -4,10 +4,19 @@ import os
 from configparser import ConfigParser
 import traceback
 from eml_to_msg import process_directory
+from updater import check_for_updates
 import sys
 
 CONFIG_FILE = 'config.ini'
+current_dir = os.path.dirname(os.path.realpath(__file__))
 
+# version.py
+VERSION = "1.0.1"
+
+##git tag -a v1.0.1 -m "Release version 1.0.1"
+##git push origin v1.0.1
+
+#
 class ToolTip:
     """Toofltip class to display tooltips for wjjidgets."""
     def __init__(self, widget, text):
@@ -134,6 +143,7 @@ class ConverterApp:
             self.config.write(configfile)
 
 if __name__ == "__main__":
+    check_for_updates()  # Updates vor GUI-Start prüfen
     root = tk.Tk()
     app = ConverterApp(root)
     root.mainloop()

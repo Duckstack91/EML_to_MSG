@@ -38,6 +38,7 @@ def update_version_in_txt():
 update_version_in_txt()
 
 # Funktion zur Durchführung des Updates
+# Funktion zur Durchführung des Updates
 def update_application():
     try:
         response = requests.get(ZIP_URL)
@@ -56,11 +57,15 @@ def update_application():
         with open(LOCAL_VERSION_FILE, "w") as f:
             f.write(get_remote_version())
 
-        messagebox.showinfo("Update", "Update erfolgreich abgeschlossen. Starten Sie das Programm neu.")
-        sys.exit()  # Programm beenden, damit der Nutzer neu starten kann
+        messagebox.showinfo("Update", "Update erfolgreich abgeschlossen. Die neue Version wird gestartet.")
+
+        # Aktuelles Programm neu starten
+        python = sys.executable  # Python-Interpreter
+        os.execl(python, python, *sys.argv)  # Neustart mit den gleichen Argumenten
     except Exception as e:
         messagebox.showerror("Update-Fehler", f"Fehler beim Update: {e}")
         print(f"Update-Fehler: {e}")
+
 
 # Funktion zum Konvertieren der Versionsnummer in ein Tupel für den Vergleich
 def convert_version_to_tuple(version):

@@ -11,7 +11,7 @@ CONFIG_FILE = 'config.ini'
 current_dir = os.path.dirname(os.path.realpath(__file__))
 
 # version.py
-VERSION = "1.0.2"
+VERSION = "1.0.1"
 ##Version Ändern für Release
 ##git tag -a v1.0.2 -m "Release version 1.0.2"
 ##git push origin v1.0.2
@@ -54,14 +54,14 @@ class ConverterApp:
         self.root.title("EML to MSG Converter")
         current_directory = os.path.dirname(os.path.abspath(__file__))
 
-        if getattr(sys, 'frozen', False):
-            icon_path = os.path.join(sys._MEIPASS, 'icons', 'Screenshot_1.png')
-        else:
-            icon_path = os.path.join(current_directory, 'icons', 'Screenshot_1.png')
+       # if getattr(sys, 'frozen', False):
+           # icon_path = os.path.join(sys._MEIPASS, 'icons', 'Screenshot_1.png')
+        #else:
+         #   icon_path = os.path.join(current_directory, 'icons', 'Screenshot_1.png')
 
-        icon = tk.PhotoImage(file=icon_path)
-        self.root.iconphoto(False, icon)
-
+        #icon = tk.PhotoImage(file=icon_path)
+       # self.root.iconphoto(False, icon)
+        #print(f"{icon_path}")
         self.config = ConfigParser()
         self.load_config()
 

@@ -15,7 +15,7 @@ VERSION = "1.0.1"
 ##Version Ändern für Release
 ##git tag -a v1.0.2 -m "Release version 1.0.2"
 ##git push origin v1.0.2
-
+##pyinstaller --onefile --windowed --version-file=version.txt --name Eml_to_Msg.exe gui.py
 
 class ToolTip:
     """Toofltip class to display tooltips for wjjidgets."""
@@ -49,6 +49,26 @@ class ToolTip:
             self.tooltip_id = None
 
 class ConverterApp:
+    def ensure_config_exists():
+        """Überprüft, ob die config.ini existiert, und erstellt sie mit Standardwerten, falls nicht."""
+        config_path = os.path.join(current_dir, CONFIG_FILE)
+        if not os.path.exists(config_path):
+            print(f"{CONFIG_FILE} nicht gefunden. Erstelle Standardkonfiguration...")
+            config = ConfigParser()
+
+            # Standardwerte einfügen
+            config['directories'] = {
+                'source_directory': os.path.join(current_dir, 'source'),
+                'output_directory': os.path.join(current_dir, 'output')
+            }
+
+            # Datei erstellen
+            with open(config_path, 'w', encoding='utf-8') as configfile:
+                config.write(configfile)
+            print(f"{CONFIG_FILE} wurde erfolgreich erstellt unter: {config_path}")
+        else:
+            print(f"{CONFIG_FILE} existiert bereits.")
+
     def __init__(self, root):
         self.root = root
         self.root.title("EML to MSG Converter")

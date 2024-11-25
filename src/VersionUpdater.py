@@ -50,13 +50,6 @@ VSVersionInfo(
 with open("version.txt", "w", encoding="utf-8") as f:
     f.write(version_info)
 
-subprocess.run([
-    "pyinstaller",
-    "--onefile",
-    "--version-file=version.txt",
-    "--name Eml_to_Msg.exe ",
-    "--windowed",
-    "gui.py"
-])
+
 
 print(f"Version {version} erfolgreich in version.txt geschrieben.")

@@ -7,15 +7,48 @@ from eml_to_msg import process_directory
 from updater import check_for_updates
 import sys
 
-CONFIG_FILE = 'config.ini'
+CONFIG_FILE = os.path.join(os.getenv('APPDATA'), 'EML_to_MSG', 'config.ini')
 current_dir = os.path.dirname(os.path.realpath(__file__))
 
 # version.py
 VERSION = "1.0.1"
 ##Version Ändern für Release
-##git tag -a v1.0.2 -m "Release version 1.0.2"
-##git push origin v1.0.2
+##git tag -a v1.0.3 -m "Release version 1.0.3"
+##git push origin v1.0.3
 ##pyinstaller --onefile --windowed --version-file=version.txt --name Eml_to_Msg.exe gui.py
+def ensure_config_exists():
+    """Überprüft, ob die config.ini existiert, und erstellt sie mit Standardwerten, falls nicht."""
+    config_dir = os.path.dirname(CONFIG_FILE)
+    if not os.path.exists(config_dir):
+        os.makedirs(config_dir)
+
+    if not os.path.exists(CONFIG_FILE):
+        print(f"{CONFIG_FILE} nicht gefunden. Erstelle Standardkonfiguration...")
+        config = ConfigParser()
+        config['directories'] = {
+            'eml_directory': '',
+            'output_directory': ''
+        }
+        with open(CONFIG_FILE, 'w', encoding='utf-8') as configfile:
+            config.write(configfile)
+        print(f"{CONFIG_FILE} wurde erfolgreich erstellt.")
+    else:
+        print(f"{CONFIG_FILE} existiert bereits.")
+
+    # Repariere Konfigurationsdatei, falls Sektionen/Schlüssel fehlen
+    config = ConfigParser()
+    config.read(CONFIG_FILE)
+
+    if 'directories' not in config:
+        config['directories'] = {}
+    if 'eml_directory' not in config['directories']:
+        config['directories']['eml_directory'] = ''
+    if 'output_directory' not in config['directories']:
+        config['directories']['output_directory'] = ''
+
+    # Änderungen speichern
+    with open(CONFIG_FILE, 'w', encoding='utf-8') as configfile:
+        config.write(configfile)
 
 class ToolTip:
     """Toofltip class to display tooltips for wjjidgets."""
@@ -49,25 +82,23 @@ class ToolTip:
             self.tooltip_id = None
 
 class ConverterApp:
-    def ensure_config_exists():
-        """Überprüft, ob die config.ini existiert, und erstellt sie mit Standardwerten, falls nicht."""
-        config_path = os.path.join(current_dir, CONFIG_FILE)
-        if not os.path.exists(config_path):
-            print(f"{CONFIG_FILE} nicht gefunden. Erstelle Standardkonfiguration...")
-            config = ConfigParser()
+    def save_config(self):
+        """Speichert die aktuellen Konfigurationswerte in der config.ini."""
+        try:
+            self.config['directories']['eml_directory'] = self.eml_directory
+            self.config['directories']['output_directory'] = self.output_directory
 
-            # Standardwerte einfügen
-            config['directories'] = {
-                'source_directory': os.path.join(current_dir, 'source'),
-                'output_directory': os.path.join(current_dir, 'output')
-            }
+            # Pfad sicherstellen und Datei speichern
+            config_dir = os.path.dirname(CONFIG_FILE)
+            if not os.path.exists(config_dir):
+                os.makedirs(config_dir)
 
-            # Datei erstellen
-            with open(config_path, 'w', encoding='utf-8') as configfile:
-                config.write(configfile)
-            print(f"{CONFIG_FILE} wurde erfolgreich erstellt unter: {config_path}")
-        else:
-            print(f"{CONFIG_FILE} existiert bereits.")
+            with open(CONFIG_FILE, 'w', encoding='utf-8') as configfile:
+                self.config.write(configfile)
+            print(f"Konfigurationsdatei wurde erfolgreich aktualisiert: {CONFIG_FILE}")
+        except Exception as e:
+            print(f"Fehler beim Speichern der Konfiguration: {e}")
+            traceback.print_exc()
 
     def __init__(self, root):
         self.root = root
@@ -130,40 +161,56 @@ class ConverterApp:
             self.eml_dir_entry.delete(0, tk.END)
             self.eml_dir_entry.insert(0, self.eml_directory)
 
+            # Automatisch den Output-Ordner festlegen
+            self.output_directory = os.path.join(self.eml_directory, "_EmlKonvertiert")
+            if not os.path.exists(self.output_directory):
+                os.makedirs(self.output_directory)
+            #print(f"Output-Ordner gesetzt auf: {self.output_directory}")
+
     def convert(self):
         self.eml_directory = self.eml_dir_entry.get()
-        self.output_directory = self.config['directories']['output_directory']
-
-        if not self.eml_directory or not self.output_directory:
-            messagebox.showerror("Fehler", "Bitte wählen Sie sowohl ein EML- als auch ein Zielverzeichnis aus.")
+        if not self.eml_directory:
+            messagebox.showerror("Fehler", "Bitte wählen Sie ein EML-Verzeichnis aus.")
             return
 
-        if not os.path.isdir(self.eml_directory) or not os.path.isdir(self.output_directory):
-            messagebox.showerror("Fehler", "Ein ausgewähltes Verzeichnis existiert nicht.")
+        if not os.path.isdir(self.eml_directory):
+            messagebox.showerror("Fehler", "Das ausgewählte Quellverzeichnis existiert nicht.")
             return
 
         try:
+            # Konvertierung starten
             process_directory(self.eml_directory, self.output_directory)
-            messagebox.showinfo("Erfolg", "Die Konvertierung wurde erfolgreich abgeschlossen.")
-            self.save_config()
+            messagebox.showinfo("Erfolg", f"Die  Konvertierung wurde erfolgreich abgeschlossen.\n"
+                                          f"Dateien gespeichert in: {self.output_directory}")
+            self.save_config()  # Konfiguration speichern
         except Exception as e:
             error_message = f"Ein Fehler ist aufgetreten: {str(e)}"
             print(f"{error_message}\n\n{traceback.format_exc()}")
             messagebox.showerror("Fehler", error_message)
 
+
     def load_config(self):
+        """Lädt die Konfiguration und stellt sicher, dass alle erforderlichen Schlüssel vorhanden sind."""
         if os.path.exists(CONFIG_FILE):
             self.config.read(CONFIG_FILE)
         else:
             self.config['directories'] = {'eml_directory': '', 'output_directory': ''}
+            return
 
-    def save_config(self):
-        self.config['directories']['eml_directory'] = self.eml_directory
-        with open(CONFIG_FILE, 'w') as configfile:
-            self.config.write(configfile)
+        # Sicherstellen, dass die Sektion 'directories' existiert
+        if 'directories' not in self.config:
+            self.config['directories'] = {}
+
+        # Standardwerte für fehlende Schlüssel setzen
+        if 'eml_directory' not in self.config['directories']:
+            self.config['directories']['eml_directory'] = ''
+        if 'output_directory' not in self.config['directories']:
+            self.config['directories']['output_directory'] = ''
+
 
 if __name__ == "__main__":
     check_for_updates()  # Updates vor GUI-Start prüfen
+    ensure_config_exists()
     root = tk.Tk()
     app = ConverterApp(root)
     root.mainloop()

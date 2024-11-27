@@ -1,6 +1,6 @@
 import requests
 import os
-import sys
+import sys, re
 from tkinter import messagebox
 from version import VERSION  # Dies lädt die aktuelle Version
 
@@ -10,11 +10,19 @@ LOCAL_VERSION_FILE = "version.txt"
 
 
 # Funktion zum Abrufen der entfernten Version von GitHub
+# Funktion zum Abrufen der entfernten Version von GitHub
 def get_remote_version():
     try:
         response = requests.get(VERSION_URL)
-        response.raise_for_status()
-        return response.text.strip()  # Entfernt Leerzeichen und Zeilenumbrüche
+        response.raise_for_status()  # Überprüft auf HTTP-Fehler
+        version = response.text.strip()  # Entfernt Leerzeichen und Zeilenumbrüche
+
+        # Überprüfen, ob die Version dem Format X.Y.Z entspricht
+        if re.match(r'^\d+\.\d+\.\d+$', version):  # X.Y.Z Format, z.B. 1.0.1
+            return version
+        else:
+            print(f"Ungültiges Versionsformat empfangen: {version}")
+            return None
     except Exception as e:
         print(f"Fehler beim Abrufen der Version: {e}")
         return None
@@ -73,30 +81,31 @@ def convert_version_to_tuple(version):
 # Funktion zur Überprüfung von Updates
 def check_for_updates():
     remote_version = get_remote_version()
-    if remote_version:
-        local_version = get_local_version()
 
-        print(f"Lokale Version: {local_version}")
-        print(f"Entfernte Version: {remote_version}")
+    if remote_version is None:
+        print("Update-Überprüfung übersprungen (Netzwerkfehler oder ungültige Version).")
+        return  # Überspringe die Versionsprüfung
 
-        # Vergleiche die Versionsnummern als Tupel
-        remote_version_tuple = convert_version_to_tuple(remote_version)
-        local_version_tuple = convert_version_to_tuple(local_version)
+    local_version = get_local_version()
 
-        # Vergleiche die Versionen
-        if remote_version_tuple > local_version_tuple:
-            print(f"Eine neue Version {remote_version} ist verfügbar.")
-            # Benutzer benachrichtigen und Option zum Updaten anbieten
-            response = messagebox.askyesno(
-                "Update verfügbar", f"Version {remote_version} ist verfügbar. Möchten Sie das Update durchführen?"
-            )
-            if response:
-                update_application()
-        else:
-            print("Die aktuelle Version ist die neueste.")
+    print(f"Lokale Version: {local_version}")
+    print(f"Entfernte Version: {remote_version}")
+
+    # Vergleiche die Versionsnummern als Tupel
+    remote_version_tuple = convert_version_to_tuple(remote_version)
+    local_version_tuple = convert_version_to_tuple(local_version)
+
+    # Vergleiche die Versionen
+    if remote_version_tuple > local_version_tuple:
+        print(f"Eine neue Version {remote_version} ist verfügbar.")
+        # Benutzer benachrichtigen und Option zum Updaten anbieten
+        response = messagebox.askyesno(
+            "Update verfügbar", f"Version {remote_version} ist verfügbar. Möchten Sie das Update durchführen?"
+        )
+        if response:
+            update_application()
     else:
-        print("Fehler beim Abrufen der Version von GitHub.")
-        messagebox.showerror("Fehler", "Die Versionsinformation konnte nicht abgerufen werden.")
+        print("Die aktuelle Version ist die neueste.")
 
 
 # Aktualisiere die lokale Version beim Start

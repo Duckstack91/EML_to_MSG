@@ -36,5 +36,5 @@ exe = EXE(
     codesign_identity=None,
     entitlements_file=None,
     version='version.txt',
-    icon=['icons\\EML_to_MSGIcon.ico'],
+    icon=['EML_to_MSGIcon.ico'],
 )

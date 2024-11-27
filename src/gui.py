@@ -15,7 +15,7 @@ VERSION = "1.0.1"
 ##Version Ändern für Release
 ##git tag -a v1.0.3 -m "Release version 1.0.3"
 ##git push origin v1.0.3
-##pyinstaller --onefile --windowed --version-file=version.txt --icon=icons/EML_to_MSGIcon.ico --name Eml_to_Msg.exe gui.py
+##pyinstaller --onefile --windowed --version-file=version.txt --icon=icons/EML_to_MSGIcon.ico --add-data="./icons/EML_to_MSGIcon.ico;icons" --name Eml_to_Msg gui.py
 def ensure_config_exists():
     """Überprüft, ob die config.ini existiert, und erstellt sie mit Standardwerten, falls nicht."""
     config_dir = os.path.dirname(CONFIG_FILE)
@@ -213,4 +213,5 @@ if __name__ == "__main__":
     ensure_config_exists()
     root = tk.Tk()
     app = ConverterApp(root)
+    root.iconbitmap("./icons/EML_to_MSGIcon.ico")
     root.mainloop()

@@ -2,10 +2,10 @@
 
 
 a = Analysis(
-    ['Eml_to_msg.py'],
+    ['gui.py'],
     pathex=[],
     binaries=[],
-    datas=[],
+    datas=[('./icons/EML_to_MSGIcon.ico', 'icons')],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
@@ -22,7 +22,7 @@ exe = EXE(
     a.binaries,
     a.datas,
     [],
-    name='Eml_to_msg',
+    name='Eml_to_Msg',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
@@ -36,4 +36,5 @@ exe = EXE(
     codesign_identity=None,
     entitlements_file=None,
     version='version.txt',
+    icon=['icons\\EML_to_MSGIcon.ico'],
 )

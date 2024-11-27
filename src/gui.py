@@ -15,7 +15,7 @@ VERSION = "1.0.1"
 ##Version Ändern für Release
 ##git tag -a v1.0.3 -m "Release version 1.0.3"
 ##git push origin v1.0.3
-##pyinstaller --onefile --windowed --version-file=version.txt --name Eml_to_Msg.exe gui.py
+##pyinstaller --onefile --windowed --version-file=version.txt --icon=icons/EML_to_MSGIcon.ico --name Eml_to_Msg.exe gui.py
 def ensure_config_exists():
     """Überprüft, ob die config.ini existiert, und erstellt sie mit Standardwerten, falls nicht."""
     config_dir = os.path.dirname(CONFIG_FILE)
@@ -180,8 +180,8 @@ class ConverterApp:
         try:
             # Konvertierung starten
             process_directory(self.eml_directory, self.output_directory)
-            messagebox.showinfo("Erfolg", f"Die  Konvertierung wurde erfolgreich abgeschlossen.\n"
-                                          f"Dateien gespeichert in: {self.output_directory}")
+            messagebox.showinfo("Erfolg", f"Die  Konvertierung wurde erfolgreich abgeschlossen.\n")
+                                          #f"Dateien gespeichert in: {self.output_directory}")
             self.save_config()  # Konfiguration speichern
         except Exception as e:
             error_message = f"Ein Fehler ist aufgetreten: {str(e)}"

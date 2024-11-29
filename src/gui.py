@@ -13,7 +13,7 @@ current_dir = os.path.dirname(os.path.realpath(__file__))
 # version.py
 VERSION = "1.0.1"
 ##Version Ändern für Release
-##git tag -a v1.1.0 -m "Release version 1.1.0"
+###git tag -a v1.1.0 -m "Release version 1.1.0"
 ##git push origin v1.1.0
 ##pyinstaller --onefile --windowed --version-file=version.txt --icon=icons/EML_to_MSGIcon.ico --add-data="./icons/EML_to_MSGIcon.ico;icons" --name Eml_to_Msg gui.py
 def ensure_config_exists():

@@ -5,6 +5,10 @@ on:
     tags:
       - 'v*'
 
+permissions:
+  contents: write  # Notwendig, um Releases zu erstellen
+  id-token: write  # Für Tokenbasierte Authentifizierung
+
 jobs:
   release:
     runs-on: ubuntu-latest
@@ -13,7 +17,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Create GitHub Release
-        id: create_release  # ID für die spätere Referenz
+        id: create_release
         uses: actions/create-release@v1
         with:
           tag_name: ${{ github.ref_name }}
@@ -22,7 +26,7 @@ jobs:
           draft: false
           prerelease: false
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Verwendung des Tokens als Umgebungsvariable
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload Release Artifact
         uses: actions/upload-release-asset@v1
@@ -32,4 +36,4 @@ jobs:
           asset_name: eml_to_msg.exe
           asset_content_type: application/octet-stream
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Token für Upload verwenden
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

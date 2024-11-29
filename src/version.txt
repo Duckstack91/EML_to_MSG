@@ -1,0 +1,33 @@
+
+VSVersionInfo(
+  ffi=FixedFileInfo(
+    filevers=(1,1,0, 0),
+    prodvers=(1,1,0, 0),
+    mask=0x3f,
+    flags=0x0,
+    OS=0x4,
+    fileType=0x1,
+    subtype=0x0,
+    date=(0, 0)
+  ),
+  kids=[
+    StringFileInfo(
+      [
+      StringTable(
+        '040904b0',
+        [
+        StringStruct('CompanyName', 'Stadt Esslingen am Neckar'),
+        StringStruct('FileDescription', 'EML zu MSG Konverter'),
+        StringStruct('FileVersion', '1.1.0.0'),
+        StringStruct('InternalName', 'eml_to_msg'),
+        StringStruct('LegalCopyright', 'Copyright © 2024 Sercan Yurdusever'),
+        StringStruct('OriginalFilename', 'eml_to_msg.exe'),
+        StringStruct('ProductName', 'EML to MSG Converter'),
+        StringStruct('ProductVersion', '1.1.0.0')
+        ]
+      )
+      ]
+    ),
+    VarFileInfo([VarStruct('Translation', [1033, 1200])])
+  ]
+)

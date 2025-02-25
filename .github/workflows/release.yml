@@ -2,13 +2,12 @@ name: Create Release
 
 on:
   push:
-    branches: [ "main" ] # This defines that the workflow triggers when changes are pushed to branch "main"
-  create:
-    name: Create release on tag # This creates a rule that triggers when a new tag is pushed, e.g., v1.0.0
-    tags: [ "v*" ] # This specifies which tags will trigger the rule (e.g., any tag starting with "v")
+    branches: [ "main" ]  # This is the branch where the tag is pushed
+  create:  # This needs to specify a rule for tags, perhaps using tags: [ "v*"`]
+    name: "Create release on tag"
 
 jobs:
-  create-release-and-upload:
+  build:
     runs-on: ubuntu-latest
 
     steps:
@@ -22,7 +21,6 @@ jobs:
         with:
           tag_name: ${{ github.ref }}
           release_name: "Release ${{ github.ref }}"
-          body: "Automatisch generiertes Release für ${{ github.ref }}"
 
         env:
           GITHUB_REF: ${{ github.ref }}

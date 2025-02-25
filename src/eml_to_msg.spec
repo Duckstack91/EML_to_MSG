@@ -5,7 +5,7 @@ a = Analysis(
     ['gui.py'],
     pathex=[],
     binaries=[],
-    datas=[('./icons/EML_to_MSGIcon.ico', 'icons')],
+    datas=[('./icons/EML_TO_MSGIcon.ico', 'icons')],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
@@ -36,5 +36,5 @@ exe = EXE(
     codesign_identity=None,
     entitlements_file=None,
     version='version.txt',
-    icon=['icons\\EML_to_MSGIcon.ico'],
+    icon=['D:\\Daten\\Allgemein\\Programmierung\\EML_to_MSG\\src\\icons\\EML_TO_MSGIcon.ico'],
 )

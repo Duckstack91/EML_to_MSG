@@ -11,11 +11,15 @@ CONFIG_FILE = os.path.join(os.getenv('APPDATA'), 'EML_to_MSG', 'config.ini')
 current_dir = os.path.dirname(os.path.realpath(__file__))
 
 # version.py
-VERSION = "1.0.1"
+VERSION = "1.1.8"
 ##Version Ändern für Release
-###git tag -a v1.1.0 -m "Release version 1.1.0"
-##git push origin v1.1.0
-##pyinstaller --onefile --windowed --version-file=version.txt --icon=icons/EML_to_MSGIcon.ico --add-data="./icons/EML_to_MSGIcon.ico;icons" --name Eml_to_Msg gui.py
+###git tag -a v1.1.8 -m "Release version v1.1.8"
+###git push origin v1.1.8
+##pyinstaller --onefile --windowed --version-file=version.txt --icon=D:\Daten\Allgemein\Programmierung\EML_to_MSG\src\icons\EML_TO_MSGIcon.ico --add-data="./icons/EML_TO_MSGIcon.ico;icons" --name Eml_to_Msg gui.py
+#Nach der Reihe zum Updaten ausführen#
+#Die Versionen anpassen bei version.py und im Programm hier#
+#Die Version.txt Datei liegt in "https://raw.githubusercontent.com/Duckstack91/EML_to_MSG/master/src/version.txt"#
+#release.yaml config ist unter .github. Das managed den Release tag und erstellen des releases#
 def ensure_config_exists():
     """Überprüft, ob die config.ini existiert, und erstellt sie mit Standardwerten, falls nicht."""
     config_dir = os.path.dirname(CONFIG_FILE)
@@ -213,5 +217,5 @@ if __name__ == "__main__":
     ensure_config_exists()
     root = tk.Tk()
     app = ConverterApp(root)
-    root.iconbitmap("./icons/EML_to_MSGIcon.ico")
+    root.iconbitmap(r"D:\Daten\Allgemein\Programmierung\EML_to_MSG\src\icons\EML_to_MSGIcon.ico")
     root.mainloop()

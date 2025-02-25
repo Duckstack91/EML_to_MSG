@@ -1,16 +1,22 @@
 import importlib.util
-import subprocess
 import os
 
-# version.py dynamisch importieren
+# `version.py` dynamisch importieren
 spec = importlib.util.spec_from_file_location("version", "version.py")
 version_module = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(version_module)
 
-# Version aus version.py
+# Version aus `version.py`
 version = version_module.VERSION
 
-# Version als Ressourcendatei erstellen
+# 📝 Version nur als Zahl für GitHub speichern
+github_version_path = "src/version.txt"
+os.makedirs(os.path.dirname(github_version_path), exist_ok=True)
+with open(github_version_path, "w", encoding="utf-8") as f:
+    f.write(version)  # Speichert nur `1.1.2`
+
+# 📦 Version für PyInstaller als `version.txt`
+pyinstaller_version_path = "version.txt"
 version_info = f"""
 VSVersionInfo(
   ffi=FixedFileInfo(
@@ -45,11 +51,9 @@ VSVersionInfo(
   ]
 )
 """
-
-# Version.txt schreiben
-with open("version.txt", "w", encoding="utf-8") as f:
+with open(pyinstaller_version_path, "w", encoding="utf-8") as f:
     f.write(version_info)
 
-
-
-print(f"Version {version} erfolgreich in version.txt geschrieben.")
+print(f"✅ Version {version} erfolgreich geschrieben:")
+print(f"  - PyInstaller: {pyinstaller_version_path}")
+print(f"  - GitHub: {github_version_path}")
